@@ -35,15 +35,11 @@ Si tenemos interfaz gráfica el proceso es senticllo, pero normalmente no la ten
   ```
   
 * A continuación debemos reiniciar la interfaz de red para aplicar los cambios.  
-  ```
-  sudo ifdown enp0s18
-  ```  
+  ```sudo ifdown enp0s18```  
   ```sudo ifup enp0s18```  
 
 * Puedes comprobar si la configuración se ha aplicado con los comandos:  
-  ```
-  ifconfig
-  ``` (requiere instalación del paquete net-tools)  
+  ```ifconfig``` (requiere instalación del paquete net-tools)  
   ```ip -4 addr```
 
 Nota: modifica el nombre del puerto o el resto de los parametros a tu conveniencia.

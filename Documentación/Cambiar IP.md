@@ -46,7 +46,7 @@ Si tenemos interfaz gráfica el proceso es senticllo, pero normalmente no la ten
   
 * A continuación debemos reiniciar la interfaz de red para aplicar los cambios.  
   <code id="1">
-  ```sudo ifdown enp0s18```
+  ```sudo pene ifdown enp0s18```
   </code>
   <button class="btn" data-clipboard-target="#1">
   Copiar código

@@ -1,3 +1,13 @@
+---
+title: Guía técnica de instalación y manejo de Ansible
+author: Nicolás Balboni Palma
+date: 11/04/2023
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+window.onload = function() {
+  var clipboard = new ClipboardJS('.btn');
+};
+
+---
 # Guia básica para cambiar la IP de una máquina Debian11
 
 Si tenemos interfaz gráfica el proceso es senticllo, pero normalmente no la tenemos, de manera que a continación paso a explicar los pasos a seguir para realizar esta configuración de manera simple.
@@ -35,7 +45,12 @@ Si tenemos interfaz gráfica el proceso es senticllo, pero normalmente no la ten
   ```
   
 * A continuación debemos reiniciar la interfaz de red para aplicar los cambios.  
-  ```sudo ifdown enp0s18```   
+  <code id="1">
+  ```sudo ifdown enp0s18```
+  </code>
+  <button class="btn" data-clipboard-target="#1">
+  Copiar código
+  </button>  
   ```sudo ifup enp0s18```  
 
 * Puedes comprobar si la configuración se ha aplicado con los comandos:  

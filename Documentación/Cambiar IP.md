@@ -35,7 +35,9 @@ Si tenemos interfaz gráfica el proceso es senticllo, pero normalmente no la ten
   ```
   
 * A continuación debemos reiniciar la interfaz de red para aplicar los cambios.  
-  ```sudo ifdown enp0s18```  
+  ```
+  sudo ifdown enp0s18
+  ```  
   ```sudo ifup enp0s18```  
 
 * Puedes comprobar si la configuración se ha aplicado con los comandos:  

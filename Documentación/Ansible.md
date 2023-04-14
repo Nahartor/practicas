@@ -22,7 +22,7 @@ Para ello lanzaremos el siguiente comando:
 
 Para que no tengamos que introducir la contraseña cada vez que lancemos una orden seguiremos los siguientes pasos:  
 
-* Generar un par de claves pública/privada en nuestro servidor: ```ssh key-gen -t rsa```  
+* Generar un par de claves pública/privada en nuestro servidor: ```ssh-keygen -t rsa```  
 El par de claves se almacenará en **~/.ssh/id_rsa**  
 * Exportar las claves a la(s) máquina(s) administradas: ```ssh-copy-id -i ~/.ssh/id_rsa 192.168.6.212```*  
   

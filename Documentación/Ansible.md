@@ -215,9 +215,7 @@ https://docs.ansible.com/ansible/latest/reference_appendices/config.html#the-con
 
 A veces querremos que algunas configuraciones se ejecuten únicamente despues de que sucedan determinados eventos. Para ello hacemos uso de los **handlers**.  
 
-En Ansible, un handler es una tarea especial que se ejecuta sólo cuando se produce un cambio en el estado de un recurso que es manejado por una tarea previa. En otras palabras, un handler es una tarea que se ejecuta como respuesta a un evento específico, como una actualización o un reinicio de un servicio.  
-
-Los handlers son útiles para realizar acciones que deben ser tomadas después de que se hayan realizado ciertos cambios en el estado de un recurso. Por ejemplo, si se actualiza la configuración de un servicio, es posible que sea necesario reiniciarlo para que los cambios surtan efecto. En este caso, se podría utilizar un handler para reiniciar el servicio sólo si se han realizado cambios en su configuración.  
+Un handler es una tarea que se ejecuta como respuesta a un evento específico, como una actualización o un reinicio de un servicio, por ejemplo, se podría utilizar un handler para reiniciar el servicio sólo si se han realizado cambios en su configuración.  
 
 Los handlers se definen en el archivo de tareas de Ansible (playbook) y se llaman utilizando el módulo "notify". El módulo "notify" se utiliza para notificar a Ansible de que se debe ejecutar un handler después de que se haya realizado un cambio en el estado de un recurso.  
 
@@ -237,7 +235,7 @@ A continuación veremos un ejemplo:
       service: name=apache2 state=restarted
 ```  
 
-Las posiblilidades que esto abre a la hora de administrar nodos de una red son practicamente infinitas. Además, la de Ansible es una comunidad activa que constantemente está aportanfo nuevos módulos, ideas y trabajos que pueden sernos de gran utilidad. 
+Las posiblilidades que esto abre a la hora de administrar nodos de una red son practicamente infinitas. Además, la de Ansible es una comunidad activa que constantemente está aportando nuevos módulos, ideas y trabajos que pueden sernos de gran utilidad. 
 
 Aquí podemos observar que da fallo al no haber incluido la clausula **become** y haber intentado lanzar una tarea que requiere permisos de super usuario:  
 

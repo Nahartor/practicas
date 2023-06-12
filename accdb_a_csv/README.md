@@ -3,7 +3,7 @@
 Este proyecto emplea `Python`, junto con la librería `pyodbc` y el motor de bases de datos de `Microsoft Access Driver` para procesar un archivo de extensión .accdb y proporcionar lo siguiente:  
 
 
-* Un script de importación de la base de datos (solo esctructura) de extensión .sql
+* Un script de importación de la base de datos (solo estructura) de extensión .sql
 * Un archivo de extensión .csv para cada una de las tablas.  
 Cada archivo CSV tendrá por titulo <nombre_de_la_tabla>.csv y contendrá toda la información de la misma.  
 Los archivos CSV se volcarán a un directorio para su posterior utilización.

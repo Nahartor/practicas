@@ -1,6 +1,6 @@
 # ACCDB a CSV
 
-Este proyecto emplea `Python`, junto con la librería `pyodbc` y el motor de bases de datos de `Microsoft Access` para procesar un archivo de extensión .accdb y proporcionar lo siguiente:  
+Este proyecto emplea `Python`, junto con la librería `pyodbc` y el motor de bases de datos de `Microsoft Access Driver` para procesar un archivo de extensión .accdb y proporcionar lo siguiente:  
 
 
 * Un script de importación de la base de datos (solo esctructura) de extensión .sql

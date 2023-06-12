@@ -1,0 +1,39 @@
+---
+- name: Crear directorio de trabajo
+  file:
+    path: /usr/src/service1
+    state: directory
+
+- name: Descargar paquete de instalación
+  get_url:
+    url: http://www.service1.com/download/debian64
+    dest: /usr/src/service1/service1.tgz
+
+- name: Descomprimir paquete de instalación
+  unarchive:
+    src: /usr/src/service1/service1.tgz
+    dest: /usr/src/service1/
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Instalar service1
+  shell: make install
+  args:
+    chdir: /usr/src/service1
+
+- name: Modificar archivo de configuración de Apache
+  lineinfile:
+    dest: /etc/apache2/apache2.conf
+    line: 'ServerName 127.0.0.1'
+
+- name: Recargar configuración de Apache
+  systemd:
+    name: apache2
+    state: reloaded
+
+- name: Reiniciar servicio de Apache
+  systemd:
+    name: apache2
+    state: restarted
+
+

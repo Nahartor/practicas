@@ -1,0 +1,17 @@
+---
+
+- name: Cambiar el puerto por defecto de service2 para service1
+  shell: '{{ item }}'
+  with_items:
+    - 'find /var/www/html/service2 -name "*.php" -print | xargs sed -i "s/5038/55080/g"'
+    - 'find /usr/local/service2 -name "*.cfg" -print | xargs sed -i "s/5038/55080/g"'
+    - 'find /usr/local/service2 -name "*.pl" -print | xargs sed -i "s/5038/55080/g"'
+    - 'find /usr/local/service2 -name "astcli*" -print | xargs sed -i "s/5038/55080/g"'
+
+- name: Reiniciar los servicios
+  service:
+    name: '{{ item }}'
+    state: restarted
+  with_items:
+  - apache2
+  - service1

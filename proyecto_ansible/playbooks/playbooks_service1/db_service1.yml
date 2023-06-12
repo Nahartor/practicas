@@ -1,0 +1,39 @@
+---
+- name: Crear usuario para service1 en MySQL
+  mysql_user:
+    name: {{ var.DBNAME }}
+    host_all: yes
+    password: {{ var.DBPASS }}
+    priv: '*.*:ALL,GRANT'
+  register: mysql_user_output
+
+- name: Verificar creación de usuario en MySQL
+  assert:
+    that: "'Query OK, 0 rows affected' not in mysql_user_output.msg"
+    success_msg: "El usuario service1 se ha creado exitosamente en MySQL"
+
+- name: Refrescar permisos de MySQL
+  mysql_db:
+    name: mysql
+    state: flush_privs
+
+- name: Verificar refresco de permisos en MySQL
+  assert:
+    that: "'Query OK' in item"
+  with_items: "{{ mysql_user_output.stdout_lines }}"
+
+- name: Crear la base de datos service1
+  mysql_db:
+    name: service1
+    state: present
+
+- name: Comprobar que se ha creado la base de datos
+  mysql_db:
+    name: service1
+    state: dump
+  register: result
+
+- name: Mostrar el resultado
+  debug:
+    var: result
+

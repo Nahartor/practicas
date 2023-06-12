@@ -1,0 +1,64 @@
+---
+
+# Las configuraciones que aparecen comentadas sólo serían necesarias si la máquina service1 fuese Debian 9
+
+# - name: Sobrescribir archivo sources.list service1
+#   copy:
+#     content: |
+#       deb http://archive.debian.org/debian/ stretch main
+#       deb-src http://archive.debian.org/debian/ stretch main
+      
+#       deb-src http://archive.debian.org/debian-security stretch/updates main
+#       deb http://archive.debian.org/debian-security stretch/updates main
+#     dest: /etc/apt/sources.list
+#   register: sources_updated
+
+# - name: Actualizar lista de paquetes disponibles service1
+#   apt:
+#     update_cache: yes
+#   when: sources_updated.changed
+
+# - name: Instalar paquetes necesarios
+#   apt:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - wget
+#     - make
+#     - apache2
+#     - mysql-server
+#     - mysql-client
+#     - php7.0
+#     - php-xml
+#     - php-mbstring
+#     - dnsutils
+#     - php-mysql
+#     - php7.0-sqlite3
+
+- name: Actualizar la lista de paquetes
+  apt: 
+    update_cache: yes
+
+- name: Instalar paquetes necesarios
+  apt:
+    name:
+      - wget
+      - make
+      - apache2
+      - mariadb-server
+      - mariadb-client
+      - php7.4
+      - php7.4-xml
+      - php7.4-mbstring
+      - dnsutils
+      - php7.4-mysql
+      - php7.4-sqlite3
+    state: present
+
+- name: Activar módulo mysqli de PHP
+  shell: phpenmod mysqli
+
+
+- name: Activar módulo mysqli de PHP
+  shell: phpenmod mysqli
+

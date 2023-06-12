@@ -1,0 +1,34 @@
+---
+
+- name: Crear usuario service2
+  lineinfile:
+    path: /etc/service3/manager.conf
+    line: "{{ item }}"
+    insertafter: EOF
+  with_items:
+  - "[service1]"
+  - "secret = {{ var.DBPASS }}"
+  - "deny = 0.0.0.0/0.0.0.0"
+  - "permit = {{ var.IP_SERVICE1 }}"
+  - "read = all"
+  - "write = all"
+  - "writetimeout = 1000"
+
+- name: Aplicar cambios
+  shell: service3 -rx "core restart now"
+  register: service3_manager_output
+
+- name: Crear usuario para service1 en MySQL
+  mysql_user:
+    login_user: root
+    login_unix_socket: /run/mysqld/mysqld.sock
+    login_host: localhost
+    name: "{{ var.DBUSER }}"
+    password: "{{ var.DBPASS }}"
+    priv: '*.*:ALL,GRANT'
+  register: mysql_user_output
+
+- name: Verificar creación de usuario en MySQL
+  assert:
+    that: "'Query OK, 0 rows affected' not in mysql_user_output.msg"
+    success_msg: "El usuario service1 se ha creado exitosamente en MySQL"

@@ -1,0 +1,11 @@
+---
+
+ANSIBLE_COLLECTIONS_PATH: /root/.ansible/collections/ansible_collections/
+
+IP_MAQUINA: 'ip_generica'
+
+IP_service1: 'ip_generica'
+
+DBUSER: 'service1'
+
+DBPASS: 'GenericPassWord'

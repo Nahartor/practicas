@@ -1,0 +1,160 @@
+---
+
+# Archivo "var.cfg"
+
+- name: Cambiar IP en el archivo var.cfg
+  lineinfile:
+    path: /usr/local/service1/var.cfg
+    regexp: '^manager_host='
+    line: 'manager_host={{ var.IP_maquina }}'
+
+- name: Cambiar linea 4 var.cfg
+  lineinfile:
+    path: /usr/local/service1/var.cfg
+    regexp: '^manager_port='
+    line: 'manager_port=55080'
+
+- name: Cambiar linea 5 var.cfg
+  lineinfile:
+    path: /usr/local/service1/var.cfg
+    regexp: '^manager_user='
+    line: 'manager_user={{ var.DBUSER }}'
+
+- name: Cambiar linea 6 var.cfg
+  lineinfile:
+    path: /usr/local/service1/var.cfg
+    regexp: '^manager_secret='
+    line: 'manager_secret=service1'
+
+# Archivo "admin/config.php"
+
+- name: Cambiar linea 6 admin/config.php
+  lineinfile:
+    path: /var/www/html/service1/admin/config.php
+    regexp: "^'USE_BAKEND_AUTH',true'"
+    line: "define('USE_BAKEND_AUTH'),false;"
+
+- name: Cambiar linea 22 admin/config.php
+  lineinfile:
+    path: /var/www/html/service1/admin/config.php
+    regexp: '^$DBPASS='
+    line: '$DBPASS="{{ var.DBPASS }}";'
+
+- name: Cambiar linea 42 admin/config.php
+  lineinfile:
+    path: /var/www/html/service1/admin/config.php
+    regexp: '^// $ENGINE="mirtapbx";'
+    line: '$ENGINE="maquina";'
+
+- name: Cambiar línea 54 en admin/config.php
+  lineinfile:
+    path: /var/www/html/service1/admin/config.php
+    regexp: '^$APPNAME'
+    insertbefore: '^$APPNAME'
+    line: '// '
+
+- name: Cambiar línea 55 en admin/config.php
+  lineinfile:
+    path: /var/www/html/service1/admin/config.php
+    regexp: '^$LOGONAME'
+    insertbefore: '^$LOGONAME'
+    line: '// '
+
+- name: Cambiar línea 56 en admin/config.php
+  lineinfile:
+    path: /var/www/html/service1/admin/config.php
+    regexp: '^$LOGO'
+    insertbefore: '^$LOGO'
+    line: '// '
+
+# Archivo "config.php"
+
+- name: Cambiar línea 7 en config.php
+  lineinfile:
+    path: /var/www/html/service1/config.php
+    regexp: '^$DBHOST ='
+    line: "$DBHOST = '{{ var.IP_MAQUINA }}';"
+
+- name: Cambiar línea 8 en config.php
+  lineinfile:
+    path: /var/www/html/service1/config.php
+    regexp: '^$DBNAME ='
+    line: "$DBNAME = 'maquina';"
+
+- name: Cambiar línea 9 en config.php
+  lineinfile:
+    path: /var/www/html/service1/config.php
+    regexp: '^$DBUSER ='
+    line: "$DBUSER =' '{{ var.DBUSER }}';"
+
+- name: Cambiar línea 10 en config.php
+  lineinfile:
+    path: /var/www/html/service1/config.php
+    regexp: '^$DBPASS ='
+    line: "$DBPASS = '{{ var.DBPASS }}';"
+
+- name: Cambiar línea 13 en config.php
+  lineinfile:
+    path: /var/www/html/service1/config.php
+    regexp: '^$CDRDBTABLE ='
+    line: "$CDRDBTABLE ='' 'maquina.cdr';"
+
+# Archivo "system.php"
+
+- name: Insertar texto en la línea 233 de system.php
+  blockinfile:
+    path: /var/www/html/service1/admin/system.php
+    marker: "# ANSIBLE MANAGED BLOCK - DO NOT MODIFY"
+    insertafter: "{{ 232 | int }}"
+    block: |
+      } else if ($config_engine=='maquina') {
+          $conf['MAQUINADBHOST'] = '{{ var.IP_MAQUINA }}';
+          $conf['MAQUINADBUSER'] = '{{ var.DBUSER }}';
+          $conf['MAQUINADBPASS'] = '{{ var.DBPASS }}';
+          $conf['MAQUINADBNAME'] = 'maquina';
+          require_once("functions-maquina.php");
+
+# Archivo "functions.php"
+
+- name: Insertar texto en la línea 116 de system.php
+  blockinfile:
+    path: /var/www/html/service1/admin/functions.php
+    # marker: "# ANSIBLE MANAGED BLOCK - DO NOT MODIFY"
+    insertafter: "{{ 115 | int }}"
+    block: |
+      } else if($config_engine == 'maquina') {
+        $return = maquina_check_extension_usage();
+
+# Archivo "dbconn.php"
+
+- name: Insertar texto en la línea 5 de system.php
+  blockinfile:
+    path: /var/www/html/service1/admin/dbconn.php
+    marker: "# ANSIBLE MANAGED BLOCK - DO NOT MODIFY"
+    insertafter: "{{ 4 | int }}"
+    block: |
+      if ($config_engine =="maquina") {
+          $dbMAQUINA = new dbcon($conf['MAQUINADBHOST'], $conf['MAQUINADBUSER'], $conf['MAQUINADBPASS'], $conf['MAQUINADBNAME'], true, true, $FORCE_UTF8);
+      }
+
+# Archivo "functions-maquina.php"
+
+- name: Copiar archivo functions-maquina.php a la máquina service1
+  copy:
+    src: ../../ficheros/functions-maquina.php
+    dest: /var/www/html/service1/admin/functions-maquina.php
+
+# Archivo "recordings.php"
+
+- name: Copiar archivo recordings.php a la máquina service1
+  copy:
+    src: ../../ficheros/recordings.php
+    dest: /var/www/html/service1/recordings.php
+
+# Archivo "save_recording.php"
+
+- name: Copiar archivo save_recording.php a la máquina service1
+  copy:
+    src: ../../ficheros/save_recording.php
+    dest: /var/www/html/service1/admin/save_recording.php
+

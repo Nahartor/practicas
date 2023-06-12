@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [ "$IFACE" = lo ]; then
+    /sbin/ipset restore < /etc/iptables/current.ipset
+    /sbin/iptables-restore < /etc/iptables/current.rules
+fi

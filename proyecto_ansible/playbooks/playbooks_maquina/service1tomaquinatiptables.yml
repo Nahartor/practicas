@@ -1,0 +1,23 @@
+---
+
+- name: Instalar iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+
+- name: Configurar iptables (INPUT) en maquina
+  iptables:
+    chain: INPUT
+    in_interface: "{{ ansible_default_ipv4.interface }}"
+    source: "{{ var.IP_MAQUINA }}"
+    jump: ACCEPT
+
+- name: Configurar iptables (FORWARD) en maquina
+  iptables:
+    chain: FORWARD
+    in_interface: "{{ ansible_default_ipv4.interface }}"
+    source: "{{ var.IP_MAQUINA }}"
+    jump: ACCEPT
+
+- name: Guardar la configuración de iptables
+  shell: "iptables-save > /etc/iptables/rules.v4"

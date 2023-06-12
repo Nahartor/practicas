@@ -1,0 +1,53 @@
+---
+
+- name: Modificar línea en archivo de configuración /etc/service3/manager.conf
+  lineinfile:
+    path: /etc/service3/manager.conf
+    regexp: '^bindaddr = '
+    line: 'bindaddr = 0.0.0.0 ;127.0.0.1'
+
+- name: Actualizar configuración en archivo de configuración /etc/mysql/mariadb.conf.d/50-server.cnf
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address ='
+    line: '# bind-address = 127.0.0.1\nbind-address = 0.0.0.0'
+
+- name: Recargar servicio mysql
+  systemd:
+    name: mysql
+    state: restarted
+
+- name: Recargar servicio service3
+  systemd:
+    name: service3.service
+    state: restarted
+
+- name: Comprobar si service3 está escuchando en el puerto 1234
+  wait_for:
+    port: 1234
+    state: started
+    timeout: 60
+  register: service3_port_check
+
+- name: Comprobar si mysq está escuchando en el puerto 3306
+  wait_for:
+    port: 3306
+    state: started
+    timeout: 10
+  register: mysq_port_check
+
+- name: Verificar configuración de iptables en maquina
+  shell: iptables -L
+  register: iptables_output
+  changed_when: false
+
+- name: Comprobar política por defecto
+  debug:
+    msg: "La política por defecto es DROP"
+  when: "'Chain INPUT (policy DROP)' in iptables_output.stdout_lines"
+
+- name: Comprobar reglas de puertos permitidos para service1
+  debug:
+    msg: "La regla para permitir todos los puertos desde la IP del service1 está presente"
+  when: "'ACCEPT     all  --  ' + var.IP_MAQUINA | quote + ' anywhere' in iptables_output.stdout_lines"
+

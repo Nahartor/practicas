@@ -1,0 +1,49 @@
+---
+
+- name: Instalar iptables
+  apt:
+    name: iptables
+    state: present
+
+- name: Instalar ipset
+  apt:
+    name: ipset
+    state: present
+
+- name: Crear directorio de trabajo
+  file:
+    path: /etc/iptables
+    state: directory
+
+- name: Crear archivo de configuración
+  file:
+    path: /etc/iptables/current.ipset
+    state: touch
+    mode: '0755'
+
+- name: Copiar script de configuración de iptables
+  copy:
+    src: ../../ficheros/script_iptables.sh 
+    dest: /tmp/script_iptables.sh 
+    mode: '0755'
+
+
+- name: Ejecutar script de configuración de iptables
+  shell: /tmp/script_iptables.sh
+
+- name: Eliminar script de configuración de iptables
+  file:
+    path: /tmp/script_iptables.sh
+    state: absent
+
+- name: Copiar archivo iptables
+  copy:
+    src: ../../ficheros/iptables
+    dest: /etc/network/if-pre-up.d/iptables
+    mode: '0755'
+
+- name: Reiniciar interfaz de red
+  service:
+    name: networking
+    state: restarted
+

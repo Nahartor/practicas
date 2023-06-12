@@ -1,0 +1,26 @@
+---
+
+# Instalar dependencia necesaria para la tarea "Crear usuario para service1 en MySQL"
+
+- name: Sobrescribir archivo sources.list
+  copy:
+    content: |
+      deb http://archive.debian.org/debian/ stretch main
+      deb-src http://archive.debian.org/debian/ stretch main
+      
+      deb-src http://archive.debian.org/debian-security stretch/updates main
+      deb http://archive.debian.org/debian-security stretch/updates main
+    dest: /etc/apt/sources.list
+  register: sources_updated
+
+- name: Actualizar lista de paquetes disponibles
+  apt:
+    update_cache: yes
+  when: sources_updated.changed
+
+- name: Instalar python3-pymysql
+  apt:
+    name: python3-pymysql
+    state: present
+
+# Fin instalar dependencias

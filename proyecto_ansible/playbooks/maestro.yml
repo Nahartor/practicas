@@ -1,0 +1,63 @@
+---
+- name: Maestro
+  hosts: all
+  remote_user: root
+  # gather_facts: True
+
+  vars: 
+    ansible_port: "{{ port | default('7722') }}"
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+
+    - name: Variables de entorno para el proyecto
+      include_vars:
+        file: ./variables_entorno.yml
+        name: var
+      register: service1_vars
+
+# TAREAS maquina
+
+    - name: Instalación de las dependencias necesarias en la maquina
+      when: inventory_hostname == var.IP_MAQUINA
+      include_tasks: ./playbooks_maquina/instalacion_de_dependencias_maquina.yml
+
+    - name: Añadir ip fop a iptables de maquina
+      when: inventory_hostname == var.IP_MAQUINA
+      include_tasks: ./playbooks_maquina/foptomaquinaiptables.yml
+
+    - name: Apertura de puertos en la MAQUINA
+      when: inventory_hostname == var.IP_MAQUINA
+      include_tasks: ./playbooks_maquina/apertura_puertos_maquina.yml
+
+    - name: Creacion de usuarios de acceso en la MAQUINA
+      when: inventory_hostname == var.IP_MAQUINA
+      include_tasks: ./playbooks_maquina/crear_usuarios_de_acceso.yml
+
+# TAREAS service1
+
+    - name: Instalación de dependencias en la máquina service1
+      when: inventory_hostname == var.IP_service1
+      include_tasks: ./playbooks_service1/instalar_dependencias.yml
+
+    - name: Base de datos service1
+      when: inventory_hostname == var.IP_service1
+      include_tasks: ./playbooks_service1/db_service1.yml
+
+    - name: Cambiar el puerto por defecto de service2 para service1
+      when: inventory_hostname == var.IP_service1
+      include_tasks: ./playbooks_service1/cambiar_puertos.yml
+
+    - name: Instalación de service1 en la máquina service1
+      when: inventory_hostname == var.IP_service1
+      include_tasks: ./playbooks_service1/instalacion_service1.yml
+
+    - name: Securizar la máquina FOP
+      when: inventory_hostname == var.IP_service1
+      include_tasks: ./playbooks_service1/securizar_service1.yml
+
+    - name: Integración de la máquina service1 con MAQUINA
+      when: inventory_hostname == var.IP_service1
+      include_tasks: ./playbooks_service1/integracion_service1_maquina.yml
+
+
